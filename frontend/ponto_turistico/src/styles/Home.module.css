@@ -1,0 +1,40 @@
+.home_container {
+  font-family: Arial, sans-serif;
+  width: 70%;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: #ffffff;
+}
+
+.logotipoHome {
+  display: flex;
+  align-items: center; /* Alinha verticalmente */
+  justify-content: space-between; /* Espaça os itens horizontalmente */
+  margin-bottom: 30px;
+
+}
+
+.logotipoHome img {
+  margin-top: 29px;
+  width: 200px;
+  margin-bottom: 29px;
+}
+
+.logotipoHome button {
+  padding: 10px;
+  font-size: 20px;
+  border: none;
+  border-radius: 5px;
+  background-color:#6c757d;
+  cursor: pointer;
+  padding-left: 110px;
+  padding-right: 110px;
+  margin-bottom: 3px;
+  color: black;
+}
+
+.logotipoHome button:hover {
+  background-color: #5a6268;
+}

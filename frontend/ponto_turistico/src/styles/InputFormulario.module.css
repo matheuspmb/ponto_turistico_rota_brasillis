@@ -1,0 +1,27 @@
+.form_control {
+    display: flex; /* Utiliza flexbox para alinhar label e input lado a lado */
+    align-items: center; /* Alinha verticalmente */
+    gap: 10px; /* Define o espaçamento entre a label e o input */
+    margin-bottom: 15px; /* Espaçamento entre os campos */
+}
+
+.form_control label {
+    font-weight: bold; /* Deixa o texto em negrito */
+    font-size: 20px; /* Define o tamanho da fonte */
+    width: 120px; /* Define uma largura fixa para as labels */
+    margin-right: 10px; /* Espaço à direita da label */
+}
+
+.form_control input {
+    flex: 1; /* O input ocupa o restante do espaço disponível */
+    padding: 10px; /* Espaçamento interno */
+    border: 1px solid #ccc; /* Borda */
+    border-radius: 4px; /* Bordas arredondadas */
+    font-size: 20px; /* Tamanho da fonte do input */
+}
+
+.form_control input:focus {
+    border-color: #007bff; /* Cor da borda quando o input está focado */
+    outline: none; /* Remove o contorno padrão */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Adiciona uma sombra leve ao redor */
+}

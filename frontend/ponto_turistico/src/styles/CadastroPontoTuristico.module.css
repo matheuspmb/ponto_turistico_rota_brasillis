@@ -1,0 +1,108 @@
+.cadastro_container {
+    font-family: Arial, sans-serif;
+    width: 70%;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #ffffff;
+}
+
+.inputGroup {
+    margin-bottom: 15px;
+}
+
+.inputGroup label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.inputGroup select {
+    width: calc(10% - 5px);
+    margin-right: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.inputGroup input {
+    width: calc(50% - 5px);
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.localizacao {
+    display: flex;
+    align-items: center;
+}
+
+.localizacao label {
+    margin-right: 11px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.localizacao select{
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-left: 25px;
+    margin-bottom: 14px;
+}
+.localizacao input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-left: 25px;
+    margin-bottom: 14px;
+    font-size: 20px;
+    width: 100%;
+}
+
+.buttons {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.buttons button {
+    font-size: 20px;
+    width: 25%;
+    padding: 10px;
+    margin-left: 140px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: black;
+    cursor: pointer;
+}
+
+.buttons button:hover {
+    background-color: #0056b3;
+}
+
+.buttons button:first-child {
+    background-color: #6c757d;
+}
+
+.buttons button:first-child:hover {
+    background-color: #5a6268;
+}
+
+.logotipoCad {
+    width: 1200px;
+    display: flex;
+    align-items: left;
+    margin-bottom: 60px;
+}
+
+.logotipoCad img {
+    margin-top: 29px;
+    width: 200px;
+    
+}
