@@ -13,7 +13,7 @@ const ListaPontosTuristicos = () => {
     const [pagina, setPagina] = useState(1);
     const [totalPaginas, setTotalPaginas] = useState(1);
     const [pesquisaRealizada, setPesquisaRealizada] = useState(false);
-    const navigate = useNavigate(); // Hook para navegação
+    const navigate = useNavigate(); 
 
     const handleBuscar = async () => {
         setLoading(true);

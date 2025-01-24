@@ -1,0 +1,6 @@
+@ponto_turistico_HostAddress = http://localhost:5288
+
+GET {{ponto_turistico_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

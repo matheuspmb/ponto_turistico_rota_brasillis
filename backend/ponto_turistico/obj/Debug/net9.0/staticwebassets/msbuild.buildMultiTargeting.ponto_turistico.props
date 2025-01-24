@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\ponto_turistico.props" />
+</Project>
