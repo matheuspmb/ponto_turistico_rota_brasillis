@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../styles/ListaPontosTuristicos.module.css';
-import { Link } from 'react-router-dom';
-import BotaoBuscarLista from "../components/BotaoBuscarLista";
-import { fetchPontosTuristicos } from '../services/api';
-
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import BotaoBuscarLista from '../components/BotaoBuscarLista';
+import { fetchPontosTuristicos } from '../services/api'; // Certifique-se que este serviço está corretamente configurado
 
 const ListaPontosTuristicos = () => {
     const [termoBusca, setTermoBusca] = useState('');
@@ -13,27 +11,47 @@ const ListaPontosTuristicos = () => {
     const [pagina, setPagina] = useState(1);
     const [totalPaginas, setTotalPaginas] = useState(1);
     const [pesquisaRealizada, setPesquisaRealizada] = useState(false);
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
-    const handleBuscar = async () => {
+    useEffect(() => {
+        if (pesquisaRealizada) {
+            buscarPontos();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pagina]);
+
+    const buscarPontos = async () => {
         setLoading(true);
-        setPesquisaRealizada(true);
         try {
             const dados = await fetchPontosTuristicos(termoBusca, pagina);
-            setItens(dados.pontos);
-            setTotalPaginas(dados.totalPaginas);
+            console.log(dados); 
+            if (dados && dados.pontos) {
+                setItens(dados.pontos || []);
+                setTotalPaginas(dados.totalPaginas || 1);
+            } else {
+                console.error('Estrutura inesperada de dados:', dados);
+            }
         } catch (err) {
-            console.error("Erro ao buscar pontos turísticos:", err);
+            console.error('Erro ao buscar pontos turísticos:', err);
         }
         setLoading(false);
     };
 
+    const handleBuscar = () => {
+        setPagina(1); // Reinicia a página ao buscar
+        setPesquisaRealizada(true);
+    };
+
     const handlePaginaAnterior = () => {
-        if (pagina > 1) setPagina(pagina - 1);
+        if (pagina > 1) setPagina((prev) => prev - 1);
     };
 
     const handlePaginaProxima = () => {
-        if (pagina < totalPaginas) setPagina(pagina + 1);
+        if (pagina < totalPaginas) setPagina((prev) => prev + 1);
+    };
+
+    const handleVerDetalhes = (id) => {
+        navigate(`/detalhes/${id}`); // Navega para a página de detalhes
     };
 
     return (
@@ -58,9 +76,11 @@ const ListaPontosTuristicos = () => {
                 {itens.length > 0 && !loading ? (
                     itens.map((item) => (
                         <div key={item.id} className={styles.item}>
-                            <p><strong>{item.nome}</strong></p>
+                            <p>
+                                <strong>{item.nome}</strong>
+                            </p>
                             <p>{item.localizacao}</p>
-                            <button >
+                            <button onClick={() => handleVerDetalhes(item.id)}>
                                 Ver Detalhes
                             </button>
                         </div>
@@ -69,16 +89,32 @@ const ListaPontosTuristicos = () => {
             </div>
 
             {itens.length > 0 && (
-                <div className={styles.paginacao}>
-                    <a href="#" onClick={handlePaginaAnterior}
+                <div className={styles.paginacao}>   // paginação
+                    <a
+                        href="#"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            handlePaginaAnterior();
+                        }}
                         aria-disabled={pagina === 1}
-                        style={{ pointerEvents: pagina === 1 ? 'none' : 'auto' }}>
+                        style={{ pointerEvents: pagina === 1 ? 'none' : 'auto' }}
+                    >
                         Voltar
                     </a>
-                    <span>Página {pagina} de {totalPaginas}</span>
-                    <a href="#" onClick={handlePaginaProxima}
+                    <span>
+                        Página {pagina} de {totalPaginas}
+                    </span>
+                    <a
+                        href="#"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            handlePaginaProxima();
+                        }}
                         aria-disabled={pagina === totalPaginas}
-                        style={{ pointerEvents: pagina === totalPaginas ? 'none' : 'auto' }}>
+                        style={{
+                            pointerEvents: pagina === totalPaginas ? 'none' : 'auto',
+                        }}
+                    >
                         Avançar
                     </a>
                 </div>

@@ -3,21 +3,22 @@ import { useParams } from 'react-router-dom';
 import logoEmpresa from '../../imagens/logoEmpresa.png';
 import styles from '../../styles/CadastroPontoTuristico.module.css';
 import BotaoVoltar from "../BotaoVoltar";
-import BotaoCadastrarNovoPontoTuristico from "../BotaoCadastrarNovoPontoTuristico";
-import InputFormulario from "../InputFormulario"; // Corrigido para o componente correto
+import BotaoCadastrarPontoTuristico from "../BotaoCadastrarPontoTuristico";
+import InputFormulario from "../InputFormulario";
 import { fetchPontoTuristicoPorId, cadastrarPontoTuristico } from '../../services/api';
 
 function CadastroPontoTuristico() {
     const { id } = useParams(); 
     const [ponto, setPonto] = useState({
-        nome: '',
-        uf: '',
-        cidade: '',
+        nome_ponto_turistico: '',
+        localizacao_UF: '',
+        localizacao_cidade: '',
         referencia: '',
         descricao: '',
-    }); // Inicializando com valores vazios para o ponto turístico
+    });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [loading, setLoading] = useState(true); // Adicionando estado de carregamento
 
     const ufs = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB",
          "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"];
@@ -25,14 +26,17 @@ function CadastroPontoTuristico() {
     useEffect(() => {
         const fetchDetalhes = async () => {
             try {
-                const dados = await fetchPontoTuristicoPorId(id); // Irá buscar os dados do ponto turístico pelo ID
+                const dados = await fetchPontoTuristicoPorId(id); // Buscar dados do ponto turístico
                 setPonto(dados);
             } catch (err) {
                 console.error("Erro ao buscar ponto turístico:", err);
+            } finally {
+                setLoading(false); // Após o carregamento, muda o estado
             }
         };
 
         if (id) fetchDetalhes();
+        else setLoading(false); // Se não houver ID, desconsidera o carregamento
     }, [id]);
 
     const handleChange = (e) => {
@@ -44,26 +48,26 @@ function CadastroPontoTuristico() {
     };
 
     const handleSubmit = async (e) => {
-      e.preventDefault();
-      setIsSubmitting(true);
+        e.preventDefault();
+        setIsSubmitting(true);
   
-      try {
-          const dadosSalvos = await cadastrarPontoTuristico(ponto);
-          if (dadosSalvos) {
-              alert("Ponto turístico cadastrado com sucesso!");
-          } else {
-              alert("Erro ao cadastrar ponto turístico.");
-          }
-      } catch (err) {
-          console.error("Erro ao cadastrar ponto turístico", err);
-          alert("Erro ao cadastrar ponto turístico.");
-      }
+        try {
+            const dadosSalvos = await cadastrarPontoTuristico(ponto);
+            if (dadosSalvos) {
+                alert("Ponto turístico cadastrado com sucesso!");
+            } else {
+                alert("Erro ao cadastrar ponto turístico.");
+            }
+        } catch (err) {
+            console.error("Erro ao cadastrar ponto turístico", err);
+            alert("Erro ao cadastrar ponto turístico.");
+        }
   
-      setIsSubmitting(false);
-  };  
+        setIsSubmitting(false);
+    };  
 
-    if (!ponto) {
-        return <p>Carregando...</p>; // Vai exibir "Carregando..." enquanto os dados não chegam
+    if (loading) {
+        return <p>Carregando...</p>; // Exibe "Carregando..." enquanto os dados não chegam
     }
 
     return (
@@ -76,28 +80,27 @@ function CadastroPontoTuristico() {
                     <InputFormulario
                         type="text"
                         text="Nome:"
-                        name="nome"
+                        name="nome_ponto_turistico"
                         placeholder="Nome do ponto turístico"
-                        value={ponto.nome}
-                        onChange={handleChange} // A função de atualização do estado
+                        value={ponto.nome_ponto_turistico}
+                        onChange={handleChange}
                     />
 
                     <label>Localização:</label>
                     <div className={styles.localizacao}>
                         <label>UF/Cidade:</label>
-                        <select name="uf" value={ponto.uf} onChange={handleChange}>
+                        <select name="localizacao_UF" value={ponto.localizacao_UF} onChange={handleChange}>
                             <option value="">Estado</option>
                             {ufs.map(uf => (
                                 <option key={uf} value={uf}>{uf}</option>
                             ))}
                         </select>
-                        {/* Removido readOnly para permitir edição */}
                         <input
                             type="text"
-                            name="cidade"
+                            name="localizacao_cidade"
                             placeholder="Cidade do ponto turístico"
-                            value={ponto.cidade}
-                            onChange={handleChange} // A função de atualização do estado
+                            value={ponto.localizacao_cidade}
+                            onChange={handleChange}
                         />
                     </div>
 
@@ -107,7 +110,7 @@ function CadastroPontoTuristico() {
                         name="referencia"
                         placeholder="Referência"
                         value={ponto.referencia}
-                        onChange={handleChange} // A função de atualização do estado
+                        onChange={handleChange}
                     />
 
                     <InputFormulario
@@ -116,13 +119,13 @@ function CadastroPontoTuristico() {
                         name="descricao"
                         placeholder="Descreva o ponto turístico"
                         value={ponto.descricao}
-                        onChange={handleChange} // A função de atualização do estado
+                        onChange={handleChange}
                     />
                 </div>
 
                 <div className={styles.buttons}>
                     <BotaoVoltar />
-                    <BotaoCadastrarNovoPontoTuristico onClick={handleSubmit} />
+                    <BotaoCadastrarPontoTuristico />
                 </div>
             </div>
         </form>
