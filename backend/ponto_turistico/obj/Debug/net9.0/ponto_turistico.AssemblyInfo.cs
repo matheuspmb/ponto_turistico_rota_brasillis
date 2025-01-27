@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ponto_turistico")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+da3274db620d4ec35ad68275f70448c97fb14956")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+826f6dd3e0921bd5efef091478487e98b72bcc4a")]
 [assembly: System.Reflection.AssemblyProductAttribute("ponto_turistico")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ponto_turistico")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
