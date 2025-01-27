@@ -1,70 +1,85 @@
-# Getting Started with Create React App
+# Ponto Turistico Rota Brasillis
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este projeto é uma aplicação web desenvolvida com **React** no frontend e **ASP.NET** com **C#** no backend. O objetivo é fornecer informações sobre pontos turísticos, permitindo que o usuário busque, visualize e cadastre novos pontos turísticos.
 
-## Available Scripts
+## Pré-requisitos
 
-In the project directory, you can run:
+Antes de rodar o projeto, você precisa ter os seguintes programas instalados no seu computador:
 
-### `npm start`
+1. **Node.js** (versão 14 ou superior): Para rodar o frontend em React.
+   - [Download Node.js](https://nodejs.org/)
+   
+2. **.NET SDK** (versão 6 ou superior): Para rodar o backend em ASP.NET.
+   - [Download .NET SDK](https://dotnet.microsoft.com/download)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+3. **SQL Server** 
+   - Para armazenamento de dados do ponto turístico (se o banco de dados for local).
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Instalação
 
-### `npm test`
+# 1. Clonar o repositório
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Clone o repositório para sua máquina local:
 
-### `npm run build`
+```bash
+git clone https://github.com/matheuspmb/ponto_turistico_rota_brasillis
+cd ponto_turistico_rota_brasillis
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Instalar as dependências do frontend
+Acesse a pasta do frontend (onde está o código React) e instale as dependências necessárias:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+cd frontend
+npm install
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Instalar as dependências do backend:
+Acesse a pasta do backend (onde está o código ASP.NET) e restaure as dependências:
 
-### `npm run eject`
+cd backend
+dotnet restore  
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Configuração do banco de dados:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+O projeto utiliza banco de dados (SQL Server), siga os passos abaixo para configurar:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Crie um banco de dados no seu servidor.
+Altere a string de conexão no arquivo appsettings.json do backend para corresponder ao seu ambiente.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Se necessário, execute as migrações para configurar o banco:
 
-## Learn More
+dotnet ef database update
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Rodar o projeto:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+##Frontend: Para rodar o frontend, no diretório frontend execute:
 
-### Code Splitting
+npm start
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Isso iniciará o servidor de desenvolvimento do React na URL http://localhost:3000
 
-### Analyzing the Bundle Size
+## Backend: Para rodar o backend, no diretório backend execute:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+dotnet run
 
-### Making a Progressive Web App
+Isso iniciará o servidor backend ASP.NET C# na URL https://localhost:5001
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Funcionalidades
+Cadastro de ponto turístico: O usuário pode cadastrar um novo ponto turístico informando nome, descrição, localização, e referência.
+Busca de pontos turísticos: O usuário pode buscar por pontos turísticos de acordo com a localização ou nome.
+Exibição de detalhes: Ao clicar em um ponto turístico, o usuário pode ver mais detalhes sobre o local.
 
-### Advanced Configuration
+## Estrutura de pastas
+frontend/: Contém o código React para a interface do usuário.
+backend/: Contém o código ASP.NET para o servidor e a API.
+README.md: Este arquivo.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Tecnologias utilizadas
 
-### Deployment
+# Frontend:
+React.js
+CSS Modules
+Axios (para requisições HTTP)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+# Backend:
+ASP.NET Core (C#)
+Entity Framework Core
+SQL Server

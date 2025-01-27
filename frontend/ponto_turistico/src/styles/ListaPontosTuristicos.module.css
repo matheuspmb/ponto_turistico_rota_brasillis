@@ -2,7 +2,7 @@
     display: flex;
     justify-content: space-between;
     gap: 60px;
-    margin-bottom: 100px;
+    margin-bottom: 50px;
   }
   
   .pesquisaContainer input {
@@ -53,7 +53,7 @@
   }
 
   .paginacao {
-    margin-top: 100px;
+    margin-top: 50px;
    display: flex;
     justify-content: space-between;
     align-items: center;
@@ -64,3 +64,47 @@
 .paginacao a{
   font-size: 20px;
 }
+
+.item p{
+padding-top: 10px
+}
+
+
+.item {
+  flex-direction: column;
+  word-wrap: break-word; /* Quebra palavras longas para evitar transbordamento */
+  overflow-wrap: break-word; 
+}
+
+
+.textoDescricao {
+  word-wrap: break-word;
+  overflow-wrap: break-word; 
+  word-break: break-word; 
+  white-space: normal; 
+  line-height: 1.5em; 
+  word-wrap: break-word; 
+  overflow-wrap: break-word; 
+}
+
+
+.nomePontoTuristico {
+  font-size: 28px; 
+  font-weight: bold; 
+  color: #000;
+  margin-bottom: 5px; 
+}
+
+.detalhesPonto {
+  font-size: 18px; 
+  font-weight: normal; 
+  color: #555; 
+}
+
+.detalhesDescricao {
+  font-size: 50px; 
+  font-weight: normal; 
+}
+
+
+

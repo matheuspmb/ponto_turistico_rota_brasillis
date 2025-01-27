@@ -46,13 +46,14 @@
     margin-bottom: 12px;
 }
 
-.localizacao select{
+.localizacao select {
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-left: 24px;
     margin-bottom: 14px;
 }
+
 .localizacao input {
     padding: 10px;
     border: 1px solid #ccc;
@@ -104,7 +105,7 @@
 .logotipoCad img {
     margin-top: 29px;
     width: 200px;
-    
+
 }
 
 .buttonsDetalhes {
@@ -117,4 +118,10 @@
     background-color: #007bff;
     color: black;
     cursor: pointer;
+}
+
+.error {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
 }

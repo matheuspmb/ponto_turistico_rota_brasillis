@@ -6,8 +6,7 @@ namespace ponto_turistico.Services
 {
     public interface IPontoTuristicoService
     {
-        Task<PontoTuristico> GetPontoTuristicoById(int id);
-        Task<IEnumerable<PontoTuristico>> GetPontosTuristicos();
-        Task<PontoTuristico> CadastrarPontoTuristico(PontoTuristico pontoTuristico);
+        Task<(List<PontoTuristico> Pontos, int TotalPaginas)> GetPontosTuristicos(string termoBusca, int pagina, int itensPorPagina);
+        Task<PontoTuristico> CadastrarPontoTuristico(PontoTuristico ponto);
     }
 }

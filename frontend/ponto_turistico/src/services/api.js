@@ -1,4 +1,4 @@
-const API_URL = 'https://localhost:5001/api/pontosturistico';
+const API_URL = 'https://localhost:5001/api/pontoturistico';
 
 export const cadastrarPontoTuristico = async (ponto) => {
   try {
@@ -21,10 +21,10 @@ export const cadastrarPontoTuristico = async (ponto) => {
   }
 };
 
-export const fetchPontosTuristicos = async (termoBusca = '', pagina = 1) => {
+export const fetchPontosTuristicos = async (termoBusca = '', pagina = 1, limitePorPagina = 2) => {
   try {
-    const url = `${API_URL}?search=${termoBusca}&page=${pagina}`;
-    console.log('Requisição para URL:', url); // Log da URL para verificar
+    const url = `${API_URL}?termoBusca=${termoBusca}&pagina=${pagina}&limitePorPagina=${limitePorPagina}`;
+    console.log('Requisição para URL:', url);
     const response = await fetch(url);
 
     if (!response.ok) {
@@ -32,12 +32,12 @@ export const fetchPontosTuristicos = async (termoBusca = '', pagina = 1) => {
     }
 
     const data = await response.json();
-    console.log('Dados retornados pela API:', data); // Verifique a estrutura dos dados
-    return data;
+    console.log('Dados retornados pela API:', data);
 
+    return data;
   } catch (err) {
-    console.error("Erro ao buscar pontos turísticos:", err);
-    return { pontos: [], totalPaginas: 1 }; // Retorna uma estrutura vazia em caso de erro
+    console.error('Erro ao buscar pontos turísticos:', err);
+    return { pontos: [], totalItens: 0, totalPaginas: 1 }; // Retorna uma estrutura vazia em caso de erro
   }
 };
 

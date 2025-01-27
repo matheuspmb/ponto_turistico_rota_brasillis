@@ -2,54 +2,58 @@ using Microsoft.AspNetCore.Mvc;
 using ponto_turistico.Models;
 using ponto_turistico.Services;
 using System.Threading.Tasks;
+using System.Linq;
 
-namespace ponto_turistico.Controllers
+[Route("api/pontoturistico")]
+[ApiController]
+public class PontoTuristicoController : ControllerBase
 {
-    [Route("api/pontoturistico")]
-    [ApiController]
-    public class PontoTuristicoController : ControllerBase
+    private readonly IPontoTuristicoService _pontoTuristicoService;
+
+    public PontoTuristicoController(IPontoTuristicoService pontoTuristicoService)
     {
-        private readonly IPontoTuristicoService _pontoTuristicoService;
+        _pontoTuristicoService = pontoTuristicoService;
+    }
 
-        public PontoTuristicoController(IPontoTuristicoService pontoTuristicoService)
+    [HttpGet]
+    public async Task<IActionResult> GetPontosTuristicos([FromQuery] string termoBusca = "", [FromQuery] int pagina = 1, [FromQuery] int limitePorPagina = 2)  // Limite por página default é 2
+    {
+        try
         {
-            _pontoTuristicoService = pontoTuristicoService;
+            var (pontos, totalItens) = await _pontoTuristicoService.GetPontosTuristicos(termoBusca, pagina, limitePorPagina);
+
+            // Calculando o número total de páginas
+            var totalPaginas = (int)Math.Ceiling((double)totalItens / limitePorPagina);
+
+            return Ok(new
+            {
+                pontos,
+                totalItens,
+                totalPaginas
+            });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Erro interno: {ex.Message}");
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreatePonto([FromBody] PontoTuristico ponto)
+    {
+        if (ponto == null)
+        {
+            return BadRequest("Os dados enviados são inválidos.");
         }
 
-        // GET /api/pontoturistico
-        [HttpGet]
-        public async Task<IActionResult> GetAllPontos()
+        try
         {
-            try
-            {
-                var pontos = await _pontoTuristicoService.GetPontosTuristicos();
-                return Ok(pontos);
-            }
-            catch (System.Exception ex)
-            {
-                return StatusCode(500, $"Erro interno: {ex.Message}");
-            }
+            var pontoCriado = await _pontoTuristicoService.CadastrarPontoTuristico(ponto);
+            return CreatedAtAction(nameof(GetPontosTuristicos), new { id = pontoCriado.id }, pontoCriado);
         }
-
-        // POST /api/pontoturistico
-        [HttpPost]
-        public async Task<IActionResult> CreatePonto([FromBody] PontoTuristico ponto)
+        catch (Exception ex)
         {
-            if (ponto == null)
-            {
-                return BadRequest("Os dados enviados são inválidos.");
-            }
-
-            try
-            {
-                var pontoCriado = await _pontoTuristicoService.CadastrarPontoTuristico(ponto);
-                
-                return CreatedAtAction(nameof(GetAllPontos), new { id = pontoCriado.id }, pontoCriado);
-            }
-            catch (System.Exception ex)
-            {
-                return StatusCode(500, $"Erro interno: {ex.Message}");
-            }
+            return StatusCode(500, $"Erro interno: {ex.Message}");
         }
     }
 }

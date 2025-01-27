@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using ponto_turistico.Data;
 using ponto_turistico.Services;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Configuração de CORS (permite acesso ao frontend React)

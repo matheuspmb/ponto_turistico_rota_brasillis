@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../styles/ListaPontosTuristicos.module.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import BotaoBuscarLista from '../components/BotaoBuscarLista';
-import { fetchPontosTuristicos } from '../services/api'; // Certifique-se que este serviço está corretamente configurado
+import { fetchPontosTuristicos } from '../services/api';
 
 const ListaPontosTuristicos = () => {
     const [termoBusca, setTermoBusca] = useState('');
@@ -11,35 +11,56 @@ const ListaPontosTuristicos = () => {
     const [pagina, setPagina] = useState(1);
     const [totalPaginas, setTotalPaginas] = useState(1);
     const [pesquisaRealizada, setPesquisaRealizada] = useState(false);
-    const navigate = useNavigate();
+    const [detalhesVisiveis, setDetalhesVisiveis] = useState(null);
+    const [totalItens, setTotalItens] = useState(0);
 
     useEffect(() => {
         if (pesquisaRealizada) {
             buscarPontos();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pagina]);
+    }, [pagina, pesquisaRealizada]);
 
     const buscarPontos = async () => {
         setLoading(true);
         try {
-            const dados = await fetchPontosTuristicos(termoBusca, pagina);
-            console.log(dados); 
+            const dados = await fetchPontosTuristicos(termoBusca, pagina, 3);
+            console.log('Dados retornados pela API:', dados);
+
             if (dados && dados.pontos) {
                 setItens(dados.pontos || []);
-                setTotalPaginas(dados.totalPaginas || 1);
+                const totalItensApi = dados.totalItens || 0;
+                setTotalItens(totalItensApi);
+
+                // Calculando o número total de páginas
+                const paginasCalculadas = Math.max(1, Math.ceil(totalItensApi / 3));
+                setTotalPaginas(paginasCalculadas);
+
+                if (pagina > paginasCalculadas && paginasCalculadas > 0) {
+                    setPagina(paginasCalculadas);
+                }
             } else {
                 console.error('Estrutura inesperada de dados:', dados);
+                setItens([]);
+                setTotalItens(0);
+                setTotalPaginas(1);
             }
         } catch (err) {
             console.error('Erro ao buscar pontos turísticos:', err);
+            setItens([]);
+            setTotalItens(0);
+            setTotalPaginas(1);
         }
         setLoading(false);
     };
 
     const handleBuscar = () => {
-        setPagina(1); // Reinicia a página ao buscar
+        if (!termoBusca.trim()) {
+            alert("Por favor, insira um termo para buscar.");
+            return;
+        }
+        setPagina(1);
         setPesquisaRealizada(true);
+        buscarPontos();
     };
 
     const handlePaginaAnterior = () => {
@@ -51,16 +72,24 @@ const ListaPontosTuristicos = () => {
     };
 
     const handleVerDetalhes = (id) => {
-        navigate(`/detalhes/${id}`); // Navega para a página de detalhes
+        setDetalhesVisiveis((prevId) => (prevId === id ? null : id));
     };
 
     return (
         <div>
             <div className={styles.pesquisaContainer}>
                 <input
-                    type="text"
+                    type="textarea"
                     value={termoBusca}
-                    onChange={(e) => setTermoBusca(e.target.value)}
+                    onChange={(e) => {
+                        const valor = e.target.value;
+                        setTermoBusca(valor);
+
+                        // Alteração: Se o campo de busca estiver vazio, redefine o estado `pesquisaRealizada` para evitar a mensagem indevida
+                        if (!valor.trim()) {
+                            setPesquisaRealizada(false);
+                        }
+                    }}
                     name="descricao"
                     placeholder="Digite um termo para buscar um ponto turístico..."
                 />
@@ -69,7 +98,10 @@ const ListaPontosTuristicos = () => {
 
             <div className={styles.listaTexto}>
                 {loading && <p>Carregando...</p>}
-                {pesquisaRealizada && itens.length === 0 && !loading && (
+                {pesquisaRealizada && !termoBusca && !loading && (
+                    <p>Por favor, insira um termo para buscar.</p>
+                )}
+                {pesquisaRealizada && termoBusca && itens.length === 0 && !loading && (
                     <p>Não encontrei nenhum resultado para a sua busca :(</p>
                 )}
 
@@ -77,11 +109,17 @@ const ListaPontosTuristicos = () => {
                     itens.map((item) => (
                         <div key={item.id} className={styles.item}>
                             <p>
-                                <strong>{item.nome}</strong>
+                                <span className={styles.nomePontoTuristico}>{item.nome_ponto_turistico}</span>
+                                <br />
+                                <span className={styles.detalhesPonto}>
+                                    {item.localizacao_UF}, {item.localizacao_cidade ? item.localizacao_cidade : item.referencia}
+                                </span>
                             </p>
-                            <p>{item.localizacao}</p>
+                            {detalhesVisiveis === item.id && (
+                                <p className={styles.detalhesPonto}> {item.descricao} </p>
+                            )}
                             <button onClick={() => handleVerDetalhes(item.id)}>
-                                Ver Detalhes
+                                {detalhesVisiveis === item.id ? 'Esconder Detalhes' : 'Ver Detalhes'}
                             </button>
                         </div>
                     ))
@@ -89,7 +127,7 @@ const ListaPontosTuristicos = () => {
             </div>
 
             {itens.length > 0 && (
-                <div className={styles.paginacao}>   // paginação
+                <div className={styles.paginacao}>
                     <a
                         href="#"
                         onClick={(e) => {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom'; 
+import { useParams } from 'react-router-dom';
 import logoEmpresa from '../../imagens/logoEmpresa.png';
 import styles from '../../styles/CadastroPontoTuristico.module.css';
 import BotaoVoltar from "../BotaoVoltar";
@@ -8,7 +8,7 @@ import InputFormulario from "../InputFormulario";
 import { fetchPontoTuristicoPorId, cadastrarPontoTuristico } from '../../services/api';
 
 function CadastroPontoTuristico() {
-    const { id } = useParams(); 
+    const { id } = useParams();
     const [ponto, setPonto] = useState({
         nome_ponto_turistico: '',
         localizacao_UF: '',
@@ -16,27 +16,27 @@ function CadastroPontoTuristico() {
         referencia: '',
         descricao: '',
     });
-
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [loading, setLoading] = useState(true); // Adicionando estado de carregamento
+    const [loading, setLoading] = useState(true);
+    const [errors, setErrors] = useState({}); // Para armazenar erros de validação
 
     const ufs = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB",
-         "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"];
+        "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"];
 
     useEffect(() => {
         const fetchDetalhes = async () => {
             try {
-                const dados = await fetchPontoTuristicoPorId(id); // Buscar dados do ponto turístico
+                const dados = await fetchPontoTuristicoPorId(id);
                 setPonto(dados);
             } catch (err) {
                 console.error("Erro ao buscar ponto turístico:", err);
             } finally {
-                setLoading(false); // Após o carregamento, muda o estado
+                setLoading(false);
             }
         };
 
         if (id) fetchDetalhes();
-        else setLoading(false); // Se não houver ID, desconsidera o carregamento
+        else setLoading(false);
     }, [id]);
 
     const handleChange = (e) => {
@@ -47,14 +47,42 @@ function CadastroPontoTuristico() {
         });
     };
 
+    const validateForm = () => {
+        const newErrors = {};
+
+        if (!ponto.nome_ponto_turistico) newErrors.nome_ponto_turistico = "Nome é obrigatório!";
+
+        if (!ponto.localizacao_UF) newErrors.localizacao_UF = "UF é obrigatório!";
+
+        if (!ponto.localizacao_cidade && !ponto.referencia) newErrors.localizacao = "Cidade ou Referência é obrigatório!";
+
+        if (!ponto.descricao || ponto.descricao.length > 100) newErrors.descricao = "Descrição é obrigatório e não pode ter mais de 100 caracteres!";
+
+        setErrors(newErrors);
+
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!validateForm()) return; // Se houver erros, não envia o formulário
+
         setIsSubmitting(true);
-  
+
         try {
             const dadosSalvos = await cadastrarPontoTuristico(ponto);
             if (dadosSalvos) {
                 alert("Ponto turístico cadastrado com sucesso!");
+
+                // Limpar os campos após o cadastramento com sucesso
+                setPonto({
+                    nome_ponto_turistico: '',
+                    localizacao_UF: '',
+                    localizacao_cidade: '',
+                    referencia: '',
+                    descricao: '',
+                });
             } else {
                 alert("Erro ao cadastrar ponto turístico.");
             }
@@ -62,12 +90,13 @@ function CadastroPontoTuristico() {
             console.error("Erro ao cadastrar ponto turístico", err);
             alert("Erro ao cadastrar ponto turístico.");
         }
-  
+
         setIsSubmitting(false);
-    };  
+    };
+
 
     if (loading) {
-        return <p>Carregando...</p>; // Exibe "Carregando..." enquanto os dados não chegam
+        return <p>Carregando...</p>;
     }
 
     return (
@@ -84,8 +113,8 @@ function CadastroPontoTuristico() {
                         placeholder="Nome do ponto turístico"
                         value={ponto.nome_ponto_turistico}
                         onChange={handleChange}
+                        error={errors.nome_ponto_turistico}
                     />
-
                     <label>Localização:</label>
                     <div className={styles.localizacao}>
                         <label>UF/Cidade:</label>
@@ -95,6 +124,7 @@ function CadastroPontoTuristico() {
                                 <option key={uf} value={uf}>{uf}</option>
                             ))}
                         </select>
+
                         <input
                             type="text"
                             name="localizacao_cidade"
@@ -114,18 +144,25 @@ function CadastroPontoTuristico() {
                     />
 
                     <InputFormulario
-                        type="text"
+                        type="textarea" 
                         text="Descrição:"
                         name="descricao"
-                        placeholder="Descreva o ponto turístico"
+                        placeholder="..."
                         value={ponto.descricao}
                         onChange={handleChange}
+                        isDescricao={true}
+                        error={errors.descricao}
                     />
+
+                    {errors.nome_ponto_turistico && <p className={styles.error}>{errors.nome_ponto_turistico}</p>}
+                    {errors.localizacao_UF && <p className={styles.error}>{errors.localizacao_UF}</p>}
+                    {errors.localizacao && <p className={styles.error}>{errors.localizacao}</p>}
+                    {errors.descricao && <p className={styles.error}>{errors.descricao}</p>}
                 </div>
 
                 <div className={styles.buttons}>
                     <BotaoVoltar />
-                    <BotaoCadastrarPontoTuristico />
+                    <BotaoCadastrarPontoTuristico isSubmitting={isSubmitting} />
                 </div>
             </div>
         </form>
@@ -133,3 +170,9 @@ function CadastroPontoTuristico() {
 }
 
 export default CadastroPontoTuristico;
+
+
+
+
+
+
