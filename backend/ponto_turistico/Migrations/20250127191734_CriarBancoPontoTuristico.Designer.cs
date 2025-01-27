@@ -12,8 +12,8 @@ using ponto_turistico.Data;
 namespace ponto_turistico.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250124064132_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250127191734_CriarBancoPontoTuristico")]
+    partial class CriarBancoPontoTuristico
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,23 +38,26 @@ namespace ponto_turistico.Migrations
 
                     b.Property<string>("descricao")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("localizacao_UF")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
 
                     b.Property<string>("localizacao_cidade")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("nome_ponto_turistico")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("referencia")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("id");
 

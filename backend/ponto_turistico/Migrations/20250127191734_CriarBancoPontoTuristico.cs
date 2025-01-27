@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ponto_turistico.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class CriarBancoPontoTuristico : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,11 +17,11 @@ namespace ponto_turistico.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    nome_ponto_turistico = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    localizacao_UF = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    localizacao_cidade = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    referencia = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    descricao = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    nome_ponto_turistico = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    localizacao_UF = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: false),
+                    localizacao_cidade = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    referencia = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    descricao = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     criadoEm = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
